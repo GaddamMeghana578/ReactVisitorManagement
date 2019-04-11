@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import sound from '../audio/Instructions.m4a';
 import officeImage from '../images/office2.jpg';
+import {Link} from 'react-router-dom';
 
 export default class coverpage extends Component {
   render() {
@@ -20,7 +21,7 @@ export default class coverpage extends Component {
             </div>
             <div className="form-group col-md-push-10 col-md-12">
                 <button className="btn btn-warning" data-dismiss="modal" data-toggle="modal" data-target="#mymodal" data-placement="left" title="If you are a visitor kindly enroll">Enroll</button>&nbsp;
-                <button className="btn btn-default" data-toggle="tooltip" data-placement="right" title="If you are an administrator kindly login"><a href="/#!/Login">Login</a></button>
+                <Link to="/Admin"><button className="btn btn-default" data-toggle="tooltip" data-placement="right" title="If you are an administrator kindly login">Login</button></Link>
             </div>
             <div className="col-sm-12">
                 <img style ={{width: "2500px", height: "750px"}} src={officeImage} className ="img-responsive" alt= "Responsive"/>
