@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import sound from '../audio/Instructions.m4a';
+import officeImage from '../images/office2.jpg';
 
 export default class coverpage extends Component {
   render() {
@@ -8,9 +10,9 @@ export default class coverpage extends Component {
             <div className="col-xs-push-3 col-sm-9">
                 <p></p>
             </div>
-            <div className = "form-group col-md-push-9 col-md-10">
-                <audio controls>
-                    <source src="/audio/Instructions.m4a" type = "audio/mp4"/>
+            <div className="form-group col-md-push-9 col-md-10">
+            <audio controls>
+                    <source src={sound} type = "audio/mp4"></source>
                 </audio>
             </div>
             <div className="col-sm-12">
@@ -21,7 +23,7 @@ export default class coverpage extends Component {
                 <button className="btn btn-default" data-toggle="tooltip" data-placement="right" title="If you are an administrator kindly login"><a href="/#!/Login">Login</a></button>
             </div>
             <div className="col-sm-12">
-                <img style ={{width: "2500px", height: "750px"}} src = "/image/office2.jpg" className ="img-responsive" alt= "Responsive"/>
+                <img style ={{width: "2500px", height: "750px"}} src={officeImage} className ="img-responsive" alt= "Responsive"/>
             </div>
         </div>
       </div>
