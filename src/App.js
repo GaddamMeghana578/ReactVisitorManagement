@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import CoverPage from "./views/coverpage";
 
 class App extends Component {
