@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import sound from "../audio/Instructions.m4a";
 import officeImage from "../images/office2.jpg";
 import { Link } from "react-router-dom";
+import "../css/print.css";
 
 export default class coverpage extends Component {
   state = {
-    visitor: {},
+    user: {},
     firstname: "",
     lastname: "",
     company: "",
@@ -13,7 +14,8 @@ export default class coverpage extends Component {
     email: "",
     mobile: "",
     person: "",
-    visit: ""
+    visit: "",
+    date: ""
   };
 
   handleInputChange = e => {
@@ -24,6 +26,46 @@ export default class coverpage extends Component {
   handlerefresh = e => {
     e.preventDefault();
     window.location.reload();
+  };
+
+  handlePrint = e => {
+    e.preventDefault();
+    console.log("check", e);
+    var elem = document.getElementById("printThis");
+    console.log("get:", elem);
+    var domClone = elem.cloneNode(true);
+
+    var printSection = document.getElementById("printSection");
+
+    if (!printSection) {
+      printSection = document.createElement("div");
+      printSection.id = "printSection";
+      document.body.appendChild(printSection);
+    }
+    printSection.innerHTML = "";
+    printSection.appendChild(domClone);
+    window.print();
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    let firstname = this.state.firstname;
+    firstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
+    let lastname = this.state.lastname;
+    lastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
+    let user = {
+      firstname: firstname,
+      lastname: lastname,
+      company: this.state.company,
+      jobtitle: this.state.jobtitle,
+      email: this.state.email,
+      mobile: this.state.mobile,
+      person: this.state.person,
+      visit: this.state.visit
+    };
+    let d = new Date();
+    let date = d.toLocaleString();
+    this.setState({ user: user, date: date });
   };
 
   render() {
@@ -226,6 +268,7 @@ export default class coverpage extends Component {
                     data-dismiss="modal"
                     data-toggle="modal"
                     data-target="#yesmodal"
+                    onClick={e => this.handleSubmit(e)}
                   >
                     Submit
                   </button>
@@ -238,6 +281,52 @@ export default class coverpage extends Component {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="modal fade" id="yesmodal">
+          <div className="modal-dialog">
+            <div className="modal-content" id="printThis">
+              <div className="modal-header bg-success">
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 className="bg-success text-center">
+                  <strong>Visitor</strong>
+                </h2>
+              </div>
+              <div className="modal-body" style={{ textAlign: "center" }}>
+                <div id="container">
+                  <div />
+                </div>
+                <h3>
+                  <b>
+                    {this.state.user.firstname} {this.state.user.lastname}
+                  </b>
+                </h3>
+                <h4>
+                  Visiting: <b> {this.state.user.person}</b>
+                </h4>
+                <h4>
+                  Purpose Of Visit: <b> {this.state.user.visit}</b>
+                </h4>
+                <h4>{this.state.date}</h4>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-warning"
+                id="Print"
+                onClick={e => this.handlePrint(e)}
+              >
+                Print
+              </button>
             </div>
           </div>
         </div>
