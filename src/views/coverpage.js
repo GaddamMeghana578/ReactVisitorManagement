@@ -15,7 +15,8 @@ export default class coverpage extends Component {
     mobile: "",
     person: "",
     visit: "",
-    date: ""
+    date: "",
+    image: ""
   };
 
   handleInputChange = e => {
@@ -47,6 +48,19 @@ export default class coverpage extends Component {
     window.print();
   };
 
+  handleFileUpload = e => {
+    e.preventDefault();
+    let files = e.target.files;
+    if (files === undefined) {
+      return;
+    }
+    var reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onload = e => {
+      console.warn("img data", e.target.result, e);
+    };
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     let firstname = this.state.firstname;
@@ -61,7 +75,8 @@ export default class coverpage extends Component {
       email: this.state.email,
       mobile: this.state.mobile,
       person: this.state.person,
-      visit: this.state.visit
+      visit: this.state.visit,
+      image: this.state.image
     };
     let d = new Date();
     let date = d.toLocaleString();
@@ -77,7 +92,8 @@ export default class coverpage extends Component {
       email,
       mobile,
       person,
-      visit
+      visit,
+      image
     } = this.state;
     return (
       <div>
@@ -261,6 +277,31 @@ export default class coverpage extends Component {
                       />
                     </div>
                   </div>
+                  <div className="row">
+                    <div className="form-group col-sm-push-1 col-sm-10">
+                      <div>
+                        <input
+                          type="file"
+                          onChange={e => this.handleFileUpload(e)}
+                          name="image"
+                          value={image}
+                          accept="image/png, image/jpeg"
+                          data-toggle="tooltip"
+                          data-placement="right"
+                          title="Kindly upload the image"
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group col-sm-push-1 col-sm-10">
+                      <img
+                        src="image"
+                        alt=""
+                        width="120"
+                        height="120"
+                        quality="0.9"
+                      />
+                    </div>
+                  </div>
                 </form>
                 <div className="modal-footer">
                   <button
@@ -268,6 +309,7 @@ export default class coverpage extends Component {
                     data-dismiss="modal"
                     data-toggle="modal"
                     data-target="#yesmodal"
+                    disabled={!this.state.firstname || !this.state.lastname || !this.state.email || !this.state.visit || !this.state.person}
                     onClick={e => this.handleSubmit(e)}
                   >
                     Submit
