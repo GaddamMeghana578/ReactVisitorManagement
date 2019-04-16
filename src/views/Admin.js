@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import workImage from "../images/work.jpg";
+import SimpleReactValidator from "simple-react-validator";
 
 export default class Admin extends Component {
   constructor(props) {
     super(props);
+    this.validator = new SimpleReactValidator();
     this.state = {
       username: "",
       password: ""
@@ -19,11 +21,16 @@ export default class Admin extends Component {
   handleSubmit = e => {
     e.preventDefault();
     console.log("check:", this.state.username, this.state.password);
-    if (this.state.username === "admin" && this.state.password === "12345") {
-      console.log("Correct");
-      window.location = "/VisitorDetails";
+    if (this.validator.allValid()) {
+      if (this.state.username === "admin" && this.state.password === "12345") {
+        window.location = "/VisitorDetails";
+      } else {
+        alert("Incorrect username and password");
+      }
     } else {
-      console.log("wrong");
+      this.validator.showMessages();
+      // rerender to show messages for the first time
+      this.forceUpdate();
     }
   };
 
@@ -53,7 +60,13 @@ export default class Admin extends Component {
                       onChange={e => this.handleChange(e)}
                     />
                   </div>
-                  <h5 className="help-block">Please enter your username</h5>
+                  <span style={{ color: "red" }}>
+                    {this.validator.message(
+                      "username",
+                      this.state.username,
+                      "required"
+                    )}
+                  </span>
                 </div>
               </div>
               <div className="col-md-push-5 col-md-3">
@@ -71,7 +84,13 @@ export default class Admin extends Component {
                       onChange={e => this.handleChange(e)}
                     />
                   </div>
-                  <h5 className="help-block">Please enter your password.</h5>
+                  <span style={{ color: "red" }}>
+                    {this.validator.message(
+                      "password",
+                      this.state.password,
+                      "required"
+                    )}
+                  </span>
                 </div>
               </div>
             </div>
