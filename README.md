@@ -69,10 +69,15 @@ cd ReactVisitorManagement/server && npm start or yarn start
 Now you can see that **localhost:3000** automatically opens up on your browser and you can use the app
 
 ## Built With
+
 * [MongoDB](https://www.mongodb.com/) - No SQL Database 
 * [Express](https://expressjs.com/) - Node.js web application framework
 * [React](https://reactjs.org/) - Frontend/client javascript library
 * [Node](https://nodejs.org/en/) - Backend/server framework
+
+## Project Description
+
+React Visitor Management project uses the MERN stack technology for managing the visitors.
 
 ## Authors
 
