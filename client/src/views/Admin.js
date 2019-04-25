@@ -23,6 +23,7 @@ export default class Admin extends Component {
     console.log("check:", this.state.username, this.state.password);
     if (this.validator.allValid()) {
       if (this.state.username === "admin" && this.state.password === "12345") {
+        // Get all visitor information and show them.
         window.location = "/VisitorDetails";
       } else {
         alert("Incorrect username and password");

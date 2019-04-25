@@ -69,15 +69,22 @@ export default class coverpage extends Component {
 
   handleFileUpload = e => {
     e.preventDefault();
-    let files = e.target.files;
-    if (files === undefined) {
-      return;
-    }
-    var reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-    reader.onload = e => {
-      console.warn("img data", e.target.result, e);
-    };
+    var file = e.target.files[0];
+    if (file === undefined) return;
+
+    const data = new FormData();
+    data.append("file", file);
+
+    fetch("http://localhost:5000/uploadImage", {
+      method: "POST",
+      body: data
+    })
+      .then(response => {
+        response.json().then(body => {
+          this.setState({ image: body.file });
+        });
+      })
+      .catch(error => console.log(error));
   };
 
   handleSubmit = e => {
@@ -341,12 +348,15 @@ export default class coverpage extends Component {
                     </div>
                     <div className="row">
                       <div className="form-group col-sm-push-1 col-sm-10">
+                        <span>
+                          <strong>Kindly upload an image below</strong>
+                        </span>
                         <div>
+                          <br />
                           <input
                             type="file"
                             onChange={e => this.handleFileUpload(e)}
                             name="image"
-                            value={image}
                             accept="image/png, image/jpeg"
                             data-toggle="tooltip"
                             data-placement="right"
@@ -356,7 +366,7 @@ export default class coverpage extends Component {
                       </div>
                       <div className="form-group col-sm-push-1 col-sm-10">
                         <img
-                          src="image"
+                          src={image}
                           alt=""
                           width="120"
                           height="120"
