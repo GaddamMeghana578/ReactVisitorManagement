@@ -42,9 +42,18 @@ cd ReactVisitorManagement/client && npm install --save or yarn install --save
 
 You will need to run client & server seperately, ports are already configured, make sure you don't conflict them if you change anything.
 
-If you are not using **MongoDB** Atlas then do the below:
+If you are not using **MongoDBAtlas** then do the below:
 
-Start Mongo server in your project directory by (running command mongod on the terminal)(on mac run command sudo mongod)
+Start Mongo server in your project directory
+
+```
+cd VisitorRegistration && mongod
+```
+On mac book you need to run
+
+```
+cd VisitorRegistration && sudo mongod
+```
 
 Enter client directory and do npm start or yarn start
 
