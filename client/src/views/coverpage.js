@@ -10,7 +10,7 @@ export default class coverpage extends Component {
     super(props);
     this.validator = new SimpleReactValidator();
     this.state = {
-      user: {},
+      visitor: {},
       show: false,
       firstname: "",
       lastname: "",
@@ -21,7 +21,9 @@ export default class coverpage extends Component {
       person: "",
       visit: "",
       date: "",
-      image: ""
+      image: "",
+      uuid: "",
+      imgUpload: ""
     };
   }
 
@@ -33,7 +35,7 @@ export default class coverpage extends Component {
   handlerefresh = e => {
     e.preventDefault();
     this.setState({
-      user: {},
+      visitor: {},
       show: false,
       firstname: "",
       lastname: "",
@@ -44,7 +46,8 @@ export default class coverpage extends Component {
       person: "",
       visit: "",
       date: "",
-      image: ""
+      image: "",
+      uuid: ""
     });
   };
 
@@ -71,21 +74,89 @@ export default class coverpage extends Component {
     e.preventDefault();
     var file = e.target.files[0];
     if (file === undefined) return;
+    console.log("file check:", file);
+    if (file.type !== "image/png" && file.type !== "image/jpeg") {
+      alert("Only PNG and JPEG are accepted.");
+      return;
+    }
 
-    const data = new FormData();
-    data.append("file", file);
+    var extension = "";
+
+    if (file.type !== "image/jpeg" && file.type !== "image/png") {
+      alert("Unsupported file type");
+      return;
+    } else if (file.type === "image/jpg") {
+      extension = ".jpg";
+    } else if (file.type === "image/png") {
+      extension = ".png";
+    }
+    const formdata = new FormData();
+    formdata.append("file", file);
+    formdata.append("filename", file.name);
+    formdata.append("type", file.type);
+    formdata.append("extension", extension);
+
+    console.log("formdata:", file);
+
+    this.getBase64(file);
 
     fetch("http://localhost:5000/uploadImage", {
       method: "POST",
-      body: data
+      body: formdata
     })
-      .then(response => {
-        response.json().then(body => {
-          this.setState({ image: body.file });
-        });
-      })
+      .then(
+        response => {
+          response.json().then(body => {
+            console.log("check body:", body.file);
+            this.setState({ image: `http://localhost:5000/${body.file}` });
+          });
+        },
+        evt => {
+          var progressPercentage = parseInt((100.0 * evt.loaded) / evt.total);
+          console.log(
+            "progress: " + progressPercentage + "% " + evt.config.body.file
+          );
+        }
+      )
       .catch(error => console.log(error));
   };
+
+  /*fetch("http://localhost:5000/uploadImage", {
+      headers: {
+        Accept: "application/json, text/plain"
+      },
+      method: "POST",
+      body: formdata
+    })
+      .then(
+        response => {
+          response.json().then(body => {
+            console.log("check json body:", body);
+            this.setState({ image: body });
+            console.log(
+              "Success " +
+                body.filename +
+                "uploaded. Response: " +
+                response.body
+            );
+          });
+        }
+      )
+      .catch(error => console.log(error));
+  };*/
+
+  getBase64(file) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.setState({
+        imgUpload: reader.result
+      });
+    };
+    reader.onerror = function(error) {
+      console.log("Error: ", error);
+    };
+  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -94,7 +165,22 @@ export default class coverpage extends Component {
       firstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
       let lastname = this.state.lastname;
       lastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
-      let user = {
+      let d = new Date();
+      let date = d.toLocaleString();
+
+      var d = new Date().getTime();
+      var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function(c) {
+          var r = (d + Math.random() * 16) % 16 | 0;
+          d = Math.floor(d / 16);
+          return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+        }
+      );
+      //   return uuid;
+      console.log(uuid);
+
+      var visitorData = {
         firstname: firstname,
         lastname: lastname,
         company: this.state.company,
@@ -103,11 +189,64 @@ export default class coverpage extends Component {
         mobile: this.state.mobile,
         person: this.state.person,
         visit: this.state.visit,
-        image: this.state.image
+        image: this.state.image,
+        date: date,
+        uuid: uuid
       };
-      let d = new Date();
-      let date = d.toLocaleString();
-      this.setState({ user: user, date: date, show: true });
+
+      console.log("check visitor:", visitorData);
+
+      fetch("http://localhost:5000/VisitorRegistration", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(visitorData)
+      })
+        .then(response => {
+          response.json().then(body => {
+            console.log("body:", body);
+            this.setState({ visitor: body, show: true });
+          });
+        })
+        .catch(error => console.log(error));
+
+      /*$http
+        .post("/VisitorRegistration", visitor)
+        .then(function(data) {
+          //$scope.user = {};
+          $scope.VisitorRegistration = data;
+          console.log(data);
+          var data = data.data;
+          $scope.imgloc = data.Image;
+
+          // If the image is undefined it triggers the alert message and on clicking OK it displays the Visitor Registration page.
+          if (data.Image == undefined) {
+            alert("The Image has not been uploaded. Kindly upload the image");
+            angular.element("#mymodal").modal("show");
+            angular.element("#yesmodal").modal("hide");
+          }
+          $scope.VName = data.FirstName;
+          $scope.LName = data.LastName;
+          $scope.person = data.Person;
+          $scope.visit = data.Visit;
+          $scope.imgloc = data.Image;
+
+          var d = new Date(data.Date);
+          $scope.date = d.toLocaleString();
+
+          // We got the other details. Now get the image.
+          $http.get("/VisitorImage/" + $scope.imgloc).then(function(data) {
+            $scope.img =
+              ("data:image/jpg;base64," || "data:image/png;base64,") +
+              data.data;
+          });
+        })
+        .catch(function(data) {
+          console.log("Error:" + data);
+        });
+    };*/
     } else {
       this.validator.showMessages();
       // rerender to show messages for the first time
@@ -116,6 +255,7 @@ export default class coverpage extends Component {
   };
 
   render() {
+    console.log("image:", this.state.image);
     const {
       firstname,
       lastname,
@@ -366,7 +506,7 @@ export default class coverpage extends Component {
                       </div>
                       <div className="form-group col-sm-push-1 col-sm-10">
                         <img
-                          src={image}
+                          src={this.state.imgUpload}
                           alt=""
                           width="120"
                           height="120"
@@ -425,16 +565,17 @@ export default class coverpage extends Component {
                   </div>
                   <h3>
                     <b>
-                      {this.state.user.firstname} {this.state.user.lastname}
+                      {this.state.visitor.firstname}{" "}
+                      {this.state.visitor.lastname}
                     </b>
                   </h3>
                   <h4>
-                    Visiting: <b> {this.state.user.person}</b>
+                    Visiting: <b> {this.state.visitor.person}</b>
                   </h4>
                   <h4>
-                    Purpose Of Visit: <b> {this.state.user.visit}</b>
+                    Purpose Of Visit: <b> {this.state.visitor.visit}</b>
                   </h4>
-                  <h4>{this.state.date}</h4>
+                  <h4>{this.state.visitor.date}</h4>
                 </div>
               </div>
               <div className="modal-footer">
