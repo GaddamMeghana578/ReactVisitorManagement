@@ -23,13 +23,12 @@ module.exports = function(server) {
   });
 
   // Inserts the image into the destination path in the server.
-  /*server.post("/uploadImage", function(req, res) {
-      console.log("First:", req);
+  /*server.post("/uploadImage", (req, res, next) => {
+    console.log("data check:", req.files);
     var form = new multiparty.Form();
-    form.parse(req, function(err, fields, files) {
-     console.log("check files:", files);
+    form.parse(req, (err, fields, files) => {
+      console.log("check files:", files);
       var file = files.file[0];
-      console.log("First:", file);
       var contentType = file.headers["content-type"];
       var tmpPath = file.path;
       var extIndex = tmpPath.lastIndexOf(".");
@@ -66,25 +65,34 @@ module.exports = function(server) {
   });*/
 
   server.post("/uploadImage", (req, res, next) => {
-    console.log(req);
+    // console.log(req);
     let imageFile = req.files.file;
-
-    console.log("imageFile:", imageFile, req.body);
     imageFile.mv(`${__dirname}/../images/upload/${req.body.filename}`, function(
       err
     ) {
       if (err) {
         return res.status(500).send(err);
       }
-
-      res.json({ file: req.body.filename });
+      res.json({ file: `images/upload/${req.body.filename}` });
     });
   });
 
   // Inserts the data in to the VisitorRegistration table.
-  server.post("/VisitorRegistration", function(req, res) {
+  server.post("/VisitorRegistration", (req, res, next) => {
     var visitorData = req.body;
-    // create reusable transport method (opens pool of SMTP connections)
+    console.log("In VisitorRegistration API CAll, Request: ", req.body);
+    //console.log("In VisitorRegistration API CAll, Request Stringified: ", req);
+    var visitor = new Visitor(visitorData);
+    visitor.save(function(err, result) {
+      if (err) {
+        // console.log(err);
+        res.send(err);
+      }
+      console.log(result);
+      res.json(result);
+    });
+  });
+  /*create reusable transport method (opens pool of SMTP connections)
     var transporter = nodemailer.createTransport(
       smtpTransport({
         service: "Gmail", // sets automatically host, port and connection security settings
@@ -119,19 +127,7 @@ module.exports = function(server) {
 
       // if you don't want to use this transport object anymore, uncomment following line
       transporter.close(); // shut down the connection pool, no more messages
-    });
-
-    console.log(visitorData);
-    var visitor = new Visitor(visitorData);
-    visitor.save(function(err, result) {
-      if (err) {
-        console.log(err);
-        res.send(err);
-      }
-      console.log(result);
-      res.json(result);
-    });
-  });
+    });*/
 
   // Retrieves the image from the destination path of the server.
   server.get("/VisitorImage/:imgloc", function(req, res) {
