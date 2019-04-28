@@ -47,7 +47,8 @@ export default class coverpage extends Component {
       visit: "",
       date: "",
       image: "",
-      uuid: ""
+      uuid: "",
+      imgUpload: ""
     });
   };
 
@@ -561,6 +562,13 @@ export default class coverpage extends Component {
                 </div>
                 <div className="modal-body" style={{ textAlign: "center" }}>
                   <div id="container">
+                   <div><img
+                          src={this.state.imgUpload}
+                          alt=""
+                          width="120"
+                          height="120"
+                          quality="0.9"
+                        /></div>
                     <div />
                   </div>
                   <h3>
