@@ -7,54 +7,54 @@ import mongoose from "mongoose"; // Helper for communicating with Mongodb.
 const Schema = mongoose.Schema;
 
 const VisitorSchema = new Schema({
-  Email: {
+  email: {
     type: String,
     required: true
   },
 
-  FirstName: {
+  firstname: {
     type: String,
     required: true
   },
 
-  LastName: {
+  lastname: {
     type: String,
     required: true
   },
 
-  JobTitle: {
+  jobtitle: {
     type: String
   },
 
-  MobileNumber: {
+  mobilenumber: {
     type: Number
   },
 
-  Company: {
+  company: {
     type: String
   },
 
-  Person: {
+  person: {
     type: String,
     required: true
   },
 
-  Visit: {
+  visit: {
     type: String,
     required: true
   },
 
-  Image: {
+  image: {
     type: String,
     required: true
   },
 
-  UUID: {
+  uuid: {
     type: String,
     required: true
   },
 
-  Date: {
+  date: {
     type: Date,
     default: Date.now()
   }
