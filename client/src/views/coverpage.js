@@ -12,18 +12,18 @@ export default class coverpage extends Component {
     this.state = {
       visitor: {},
       show: false,
-      firstname: "",
-      lastname: "",
-      company: "",
-      jobtitle: "",
-      email: "",
-      mobile: "",
-      person: "",
-      visit: "",
-      date: "",
-      image: "",
-      uuid: "",
-      imgUpload: ""
+      FirstName: "",
+      LastName: "",
+      Company: "",
+      JobTitle: "",
+      Email: "",
+      Mobile: "",
+      Person: "",
+      Visit: "",
+      Date: "",
+      Image: "",
+      UUID: "",
+      ImgUpload: ""
     };
   }
 
@@ -37,18 +37,18 @@ export default class coverpage extends Component {
     this.setState({
       visitor: {},
       show: false,
-      firstname: "",
-      lastname: "",
-      company: "",
-      jobtitle: "",
-      email: "",
-      mobile: "",
-      person: "",
-      visit: "",
-      date: "",
-      image: "",
-      uuid: "",
-      imgUpload: ""
+      FirstName: "",
+      LastName: "",
+      Company: "",
+      JobTitle: "",
+      Email: "",
+      Mobile: "",
+      Person: "",
+      Visit: "",
+      Date: "",
+      Image: "",
+      UUID: "",
+      ImgUpload: ""
     });
   };
 
@@ -109,7 +109,7 @@ export default class coverpage extends Component {
         response => {
           response.json().then(body => {
             console.log("check body:", body.file);
-            this.setState({ image: `http://localhost:5000/${body.file}` });
+            this.setState({ Image: `http://localhost:5000/${body.file}` });
           });
         },
         evt => {
@@ -151,7 +151,7 @@ export default class coverpage extends Component {
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.setState({
-        imgUpload: reader.result
+        ImgUpload: reader.result
       });
     };
     reader.onerror = function(error) {
@@ -162,15 +162,15 @@ export default class coverpage extends Component {
   handleSubmit = e => {
     e.preventDefault();
     if (this.validator.allValid()) {
-      let firstname = this.state.firstname;
-      firstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
-      let lastname = this.state.lastname;
-      lastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
+      let FirstName = this.state.FirstName;
+      FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1);
+      let LastName = this.state.LastName;
+      LastName = LastName.charAt(0).toUpperCase() + LastName.slice(1);
       let d = new Date();
       let date = d.toLocaleString();
 
       var d = new Date().getTime();
-      var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      var UUID = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
         /[xy]/g,
         function(c) {
           var r = (d + Math.random() * 16) % 16 | 0;
@@ -178,21 +178,19 @@ export default class coverpage extends Component {
           return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
         }
       );
-      //   return uuid;
-      console.log(uuid);
 
       var visitorData = {
-        firstname: firstname,
-        lastname: lastname,
-        company: this.state.company,
-        jobtitle: this.state.jobtitle,
-        email: this.state.email,
-        mobile: this.state.mobile,
-        person: this.state.person,
-        visit: this.state.visit,
-        image: this.state.image,
-        date: date,
-        uuid: uuid
+        FirstName: FirstName,
+        LastName: LastName,
+        Company: this.state.Company,
+        JobTitle: this.state.JobTitle,
+        Email: this.state.Email,
+        Mobile: this.state.Mobile,
+        Person: this.state.Person,
+        Visit: this.state.Visit,
+        Image: this.state.Image,
+        Date: date,
+        UUID: UUID
       };
 
       console.log("check visitor:", visitorData);
@@ -258,15 +256,15 @@ export default class coverpage extends Component {
   render() {
     console.log("image:", this.state.image);
     const {
-      firstname,
-      lastname,
-      company,
-      jobtitle,
-      email,
-      mobile,
-      person,
-      visit,
-      image
+      FirstName,
+      LastName,
+      Company,
+      JobTitle,
+      Email,
+      Mobile,
+      Person,
+      Visit,
+      ImgUpload
     } = this.state;
     return (
       <div>
@@ -343,15 +341,15 @@ export default class coverpage extends Component {
                         <input
                           type="text"
                           className="form-control"
-                          name="firstname"
-                          value={firstname}
+                          name="FirstName"
+                          value={FirstName}
                           id="firstname"
                           onChange={e => this.handleInputChange(e)}
                         />
                         <span style={{ color: "red" }}>
                           {this.validator.message(
                             "firstname",
-                            this.state.firstname,
+                            this.state.FirstName,
                             "required|min:3|max:20"
                           )}
                         </span>
@@ -364,15 +362,15 @@ export default class coverpage extends Component {
                         <input
                           type="text"
                           className="form-control"
-                          name="lastname"
-                          value={lastname}
+                          name="LastName"
+                          value={LastName}
                           onChange={e => this.handleInputChange(e)}
                           id="lastname"
                         />
                         <span style={{ color: "red" }}>
                           {this.validator.message(
                             "lastname",
-                            this.state.lastname,
+                            this.state.LastName,
                             "required|min:3|max:20"
                           )}
                         </span>
@@ -384,9 +382,9 @@ export default class coverpage extends Component {
                         <input
                           type="text"
                           className="form-control"
-                          value={company}
+                          value={Company}
                           onChange={e => this.handleInputChange(e)}
-                          name="company"
+                          name="Company"
                           id="Company"
                         />
                       </div>
@@ -397,9 +395,9 @@ export default class coverpage extends Component {
                         <input
                           type="text"
                           className="form-control"
-                          value={jobtitle}
+                          value={JobTitle}
                           onChange={e => this.handleInputChange(e)}
-                          name="jobtitle"
+                          name="JobTitle"
                           id="jobtitle"
                         />
                       </div>
@@ -411,15 +409,15 @@ export default class coverpage extends Component {
                         <input
                           type="email"
                           className="form-control"
-                          value={email}
+                          value={Email}
                           onChange={e => this.handleInputChange(e)}
-                          name="email"
+                          name="Email"
                           id="email"
                         />
                         <span style={{ color: "red" }}>
                           {this.validator.message(
                             "email",
-                            this.state.email,
+                            this.state.Email,
                             "required|email"
                           )}
                         </span>
@@ -432,14 +430,14 @@ export default class coverpage extends Component {
                           type="tel"
                           className="form-control"
                           onChange={e => this.handleInputChange(e)}
-                          value={mobile}
-                          name="mobile"
+                          value={Mobile}
+                          name="Mobile"
                           id="mobilenumber"
                         />
                         <span style={{ color: "red" }}>
                           {this.validator.message(
                             "mobile",
-                            this.state.mobile,
+                            this.state.Mobile,
                             "phone"
                           )}
                         </span>
@@ -452,15 +450,15 @@ export default class coverpage extends Component {
                         <input
                           type="text"
                           className="form-control"
-                          value={person}
+                          value={Person}
                           onChange={e => this.handleInputChange(e)}
-                          name="person"
+                          name="Person"
                           id="Person"
                         />
                         <span style={{ color: "red" }}>
                           {this.validator.message(
                             "person",
-                            this.state.person,
+                            this.state.Person,
                             "required|alpha"
                           )}
                         </span>
@@ -473,15 +471,15 @@ export default class coverpage extends Component {
                         <input
                           type="text"
                           className="form-control"
-                          value={visit}
+                          value={Visit}
                           onChange={e => this.handleInputChange(e)}
-                          name="visit"
+                          name="Visit"
                           id="Visit"
                         />
                         <span style={{ color: "red" }}>
                           {this.validator.message(
                             "visit",
-                            this.state.visit,
+                            this.state.Visit,
                             "required|alpha"
                           )}
                         </span>
@@ -507,7 +505,7 @@ export default class coverpage extends Component {
                       </div>
                       <div className="form-group col-sm-push-1 col-sm-10">
                         <img
-                          src={this.state.imgUpload}
+                          src={ImgUpload}
                           alt=""
                           width="120"
                           height="120"
@@ -520,11 +518,11 @@ export default class coverpage extends Component {
                     <button
                       className="btn btn-warning"
                       disabled={
-                        !this.state.firstname ||
-                        !this.state.lastname ||
-                        !this.state.email ||
-                        !this.state.visit ||
-                        !this.state.person
+                        !this.state.FirstName ||
+                        !this.state.LastName ||
+                        !this.state.Email ||
+                        !this.state.Visit ||
+                        !this.state.Person
                       }
                       onClick={e => this.handleSubmit(e)}
                     >
@@ -563,7 +561,7 @@ export default class coverpage extends Component {
                 <div className="modal-body" style={{ textAlign: "center" }}>
                   <div id="container">
                    <div><img
-                          src={this.state.imgUpload}
+                          src={this.state.ImgUpload}
                           alt=""
                           width="120"
                           height="120"
@@ -573,17 +571,17 @@ export default class coverpage extends Component {
                   </div>
                   <h3>
                     <b>
-                      {this.state.visitor.firstname}{" "}
-                      {this.state.visitor.lastname}
+                      {this.state.visitor.FirstName}{" "}
+                      {this.state.visitor.LastName}
                     </b>
                   </h3>
                   <h4>
-                    Visiting: <b> {this.state.visitor.person}</b>
+                    Visiting: <b> {this.state.visitor.Person}</b>
                   </h4>
                   <h4>
-                    Purpose Of Visit: <b> {this.state.visitor.visit}</b>
+                    Purpose Of Visit: <b> {this.state.visitor.Visit}</b>
                   </h4>
-                  <h4>{this.state.visitor.date}</h4>
+                  <h4>{this.state.visitor.Date}</h4>
                 </div>
               </div>
               <div className="modal-footer">
