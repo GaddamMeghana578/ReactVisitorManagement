@@ -122,30 +122,6 @@ export default class coverpage extends Component {
       .catch(error => console.log(error));
   };
 
-  /*fetch("http://localhost:5000/uploadImage", {
-      headers: {
-        Accept: "application/json, text/plain"
-      },
-      method: "POST",
-      body: formdata
-    })
-      .then(
-        response => {
-          response.json().then(body => {
-            console.log("check json body:", body);
-            this.setState({ image: body });
-            console.log(
-              "Success " +
-                body.filename +
-                "uploaded. Response: " +
-                response.body
-            );
-          });
-        }
-      )
-      .catch(error => console.log(error));
-  };*/
-
   getBase64(file) {
     let reader = new FileReader();
     reader.readAsDataURL(file);
@@ -210,42 +186,6 @@ export default class coverpage extends Component {
           });
         })
         .catch(error => console.log(error));
-
-      /*$http
-        .post("/VisitorRegistration", visitor)
-        .then(function(data) {
-          //$scope.user = {};
-          $scope.VisitorRegistration = data;
-          console.log(data);
-          var data = data.data;
-          $scope.imgloc = data.Image;
-
-          // If the image is undefined it triggers the alert message and on clicking OK it displays the Visitor Registration page.
-          if (data.Image == undefined) {
-            alert("The Image has not been uploaded. Kindly upload the image");
-            angular.element("#mymodal").modal("show");
-            angular.element("#yesmodal").modal("hide");
-          }
-          $scope.VName = data.FirstName;
-          $scope.LName = data.LastName;
-          $scope.person = data.Person;
-          $scope.visit = data.Visit;
-          $scope.imgloc = data.Image;
-
-          var d = new Date(data.Date);
-          $scope.date = d.toLocaleString();
-
-          // We got the other details. Now get the image.
-          $http.get("/VisitorImage/" + $scope.imgloc).then(function(data) {
-            $scope.img =
-              ("data:image/jpg;base64," || "data:image/png;base64,") +
-              data.data;
-          });
-        })
-        .catch(function(data) {
-          console.log("Error:" + data);
-        });
-    };*/
     } else {
       this.validator.showMessages();
       // rerender to show messages for the first time
@@ -425,14 +365,14 @@ export default class coverpage extends Component {
                     </div>
                     <div className="row">
                       <div className="form-group col-xs-push-1 col-md-10">
-                        <label htmlFor="MobileNumber">MobileNumber</label>
+                        <label htmlFor="Mobile">Mobile</label>
                         <input
                           type="tel"
                           className="form-control"
                           onChange={e => this.handleInputChange(e)}
                           value={Mobile}
                           name="Mobile"
-                          id="mobilenumber"
+                          id="mobile"
                         />
                         <span style={{ color: "red" }}>
                           {this.validator.message(
@@ -560,13 +500,15 @@ export default class coverpage extends Component {
                 </div>
                 <div className="modal-body" style={{ textAlign: "center" }}>
                   <div id="container">
-                   <div><img
-                          src={this.state.ImgUpload}
-                          alt=""
-                          width="120"
-                          height="120"
-                          quality="0.9"
-                        /></div>
+                    <div>
+                      <img
+                        src={this.state.ImgUpload}
+                        alt=""
+                        width="120"
+                        height="120"
+                        quality="0.9"
+                      />
+                    </div>
                     <div />
                   </div>
                   <h3>

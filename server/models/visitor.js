@@ -26,7 +26,7 @@ const VisitorSchema = new Schema({
     type: String
   },
 
-  MobileNumber: {
+  Mobile: {
     type: Number
   },
 
