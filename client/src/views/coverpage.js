@@ -23,16 +23,16 @@ export default class coverpage extends Component {
       Date: "",
       Image: "",
       UUID: "",
-      ImgUpload: ""
+      ImgUpload: "",
     };
   }
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
-  handlerefresh = e => {
+  handlerefresh = (e) => {
     e.preventDefault();
     this.setState({
       visitor: {},
@@ -48,15 +48,13 @@ export default class coverpage extends Component {
       Date: "",
       Image: "",
       UUID: "",
-      ImgUpload: ""
+      ImgUpload: "",
     });
   };
 
-  handlePrint = e => {
+  handlePrint = (e) => {
     e.preventDefault();
-    console.log("check", e);
     var elem = document.getElementById("printThis");
-    console.log("get:", elem);
     var domClone = elem.cloneNode(true);
 
     var printSection = document.getElementById("printSection");
@@ -71,11 +69,9 @@ export default class coverpage extends Component {
     window.print();
   };
 
-  handleFileUpload = e => {
+  handleFileUpload = (e) => {
     e.preventDefault();
     var file = e.target.files[0];
-    if (file === undefined) return;
-    console.log("file check:", file);
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
       alert("Only PNG and JPEG are accepted.");
       return;
@@ -96,30 +92,27 @@ export default class coverpage extends Component {
     formdata.append("filename", file.name);
     formdata.append("type", file.type);
     formdata.append("extension", extension);
-
-    console.log("formdata:", file);
-
     this.getBase64(file);
 
     fetch("http://localhost:5000/uploadImage", {
       method: "POST",
-      body: formdata
+      body: formdata,
     })
       .then(
-        response => {
-          response.json().then(body => {
-            console.log("check body:", body.file);
+        (response) => {
+          response.json().then((body) => {
+            console.log("body:", body.file);
             this.setState({ Image: `http://localhost:5000/${body.file}` });
           });
         },
-        evt => {
+        (evt) => {
           var progressPercentage = parseInt((100.0 * evt.loaded) / evt.total);
           console.log(
             "progress: " + progressPercentage + "% " + evt.config.body.file
           );
         }
       )
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
 
   getBase64(file) {
@@ -127,28 +120,27 @@ export default class coverpage extends Component {
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.setState({
-        ImgUpload: reader.result
+        ImgUpload: reader.result,
       });
     };
-    reader.onerror = function(error) {
+    reader.onerror = function (error) {
       console.log("Error: ", error);
     };
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     if (this.validator.allValid()) {
       let FirstName = this.state.FirstName;
       FirstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1);
       let LastName = this.state.LastName;
       LastName = LastName.charAt(0).toUpperCase() + LastName.slice(1);
-      let d = new Date();
-      let date = d.toLocaleString();
-
+      let newDate = new Date();
+      newDate = newDate.toLocaleString();
       var d = new Date().getTime();
       var UUID = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
         /[xy]/g,
-        function(c) {
+        function (c) {
           var r = (d + Math.random() * 16) % 16 | 0;
           d = Math.floor(d / 16);
           return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
@@ -165,8 +157,8 @@ export default class coverpage extends Component {
         Person: this.state.Person,
         Visit: this.state.Visit,
         Image: this.state.Image,
-        Date: date,
-        UUID: UUID
+        Date: newDate,
+        UUID: UUID,
       };
 
       console.log("check visitor:", visitorData);
@@ -175,17 +167,16 @@ export default class coverpage extends Component {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(visitorData)
+        body: JSON.stringify(visitorData),
       })
-        .then(response => {
-          response.json().then(body => {
-            console.log("body:", body);
+        .then((response) => {
+          response.json().then((body) => {
             this.setState({ visitor: body, show: true });
           });
         })
-        .catch(error => console.log(error));
+        .catch((error) => console.log(error));
     } else {
       this.validator.showMessages();
       // rerender to show messages for the first time
@@ -194,7 +185,6 @@ export default class coverpage extends Component {
   };
 
   render() {
-    console.log("image:", this.state.image);
     const {
       FirstName,
       LastName,
@@ -204,7 +194,7 @@ export default class coverpage extends Component {
       Mobile,
       Person,
       Visit,
-      ImgUpload
+      ImgUpload,
     } = this.state;
     return (
       <div>
@@ -265,7 +255,7 @@ export default class coverpage extends Component {
                     type="button"
                     className="close"
                     data-dismiss="modal"
-                    onClick={e => this.handlerefresh(e)}
+                    onClick={(e) => this.handlerefresh(e)}
                     aria-label="Close"
                   >
                     <span aria-hidden="true">&times;</span>
@@ -284,7 +274,7 @@ export default class coverpage extends Component {
                           name="FirstName"
                           value={FirstName}
                           id="firstname"
-                          onChange={e => this.handleInputChange(e)}
+                          onChange={(e) => this.handleInputChange(e)}
                         />
                         <span style={{ color: "red" }}>
                           {this.validator.message(
@@ -304,7 +294,7 @@ export default class coverpage extends Component {
                           className="form-control"
                           name="LastName"
                           value={LastName}
-                          onChange={e => this.handleInputChange(e)}
+                          onChange={(e) => this.handleInputChange(e)}
                           id="lastname"
                         />
                         <span style={{ color: "red" }}>
@@ -323,7 +313,7 @@ export default class coverpage extends Component {
                           type="text"
                           className="form-control"
                           value={Company}
-                          onChange={e => this.handleInputChange(e)}
+                          onChange={(e) => this.handleInputChange(e)}
                           name="Company"
                           id="Company"
                         />
@@ -336,7 +326,7 @@ export default class coverpage extends Component {
                           type="text"
                           className="form-control"
                           value={JobTitle}
-                          onChange={e => this.handleInputChange(e)}
+                          onChange={(e) => this.handleInputChange(e)}
                           name="JobTitle"
                           id="jobtitle"
                         />
@@ -350,7 +340,7 @@ export default class coverpage extends Component {
                           type="email"
                           className="form-control"
                           value={Email}
-                          onChange={e => this.handleInputChange(e)}
+                          onChange={(e) => this.handleInputChange(e)}
                           name="Email"
                           id="email"
                         />
@@ -369,7 +359,7 @@ export default class coverpage extends Component {
                         <input
                           type="tel"
                           className="form-control"
-                          onChange={e => this.handleInputChange(e)}
+                          onChange={(e) => this.handleInputChange(e)}
                           value={Mobile}
                           name="Mobile"
                           id="mobile"
@@ -391,7 +381,7 @@ export default class coverpage extends Component {
                           type="text"
                           className="form-control"
                           value={Person}
-                          onChange={e => this.handleInputChange(e)}
+                          onChange={(e) => this.handleInputChange(e)}
                           name="Person"
                           id="Person"
                         />
@@ -412,7 +402,7 @@ export default class coverpage extends Component {
                           type="text"
                           className="form-control"
                           value={Visit}
-                          onChange={e => this.handleInputChange(e)}
+                          onChange={(e) => this.handleInputChange(e)}
                           name="Visit"
                           id="Visit"
                         />
@@ -434,7 +424,7 @@ export default class coverpage extends Component {
                           <br />
                           <input
                             type="file"
-                            onChange={e => this.handleFileUpload(e)}
+                            onChange={(e) => this.handleFileUpload(e)}
                             name="image"
                             accept="image/png, image/jpeg"
                             data-toggle="tooltip"
@@ -464,14 +454,14 @@ export default class coverpage extends Component {
                         !this.state.Visit ||
                         !this.state.Person
                       }
-                      onClick={e => this.handleSubmit(e)}
+                      onClick={(e) => this.handleSubmit(e)}
                     >
                       Submit
                     </button>
                     <button
                       type="reset"
                       className="btn btn-default"
-                      onClick={e => this.handlerefresh(e)}
+                      onClick={(e) => this.handlerefresh(e)}
                     >
                       Cancel
                     </button>
@@ -490,7 +480,7 @@ export default class coverpage extends Component {
                     className="close"
                     data-dismiss="modal"
                     aria-label="Close"
-                    onClick={e => this.handlerefresh(e)}
+                    onClick={(e) => this.handlerefresh(e)}
                   >
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -530,7 +520,7 @@ export default class coverpage extends Component {
                 <button
                   className="btn btn-warning"
                   id="Print"
-                  onClick={e => this.handlePrint(e)}
+                  onClick={(e) => this.handlePrint(e)}
                 >
                   Print
                 </button>

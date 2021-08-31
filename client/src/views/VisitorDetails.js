@@ -11,7 +11,7 @@ export default class VisitorDetails extends Component {
       viewVisitor: {},
       viewModalShow: false,
       deleteModalShow: false,
-      editModalShow: false
+      editModalShow: false,
     };
   }
 
@@ -19,21 +19,20 @@ export default class VisitorDetails extends Component {
     // Get all visitor information and show them.
 
     fetch("http://localhost:5000/VisitorRegistration")
-      .then(response => {
-        response.json().then(data => {
-          console.log("data:", data);
+      .then((response) => {
+        response.json().then((data) => {
           this.setState({ visitor: data });
         });
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   }
 
   viewVisitor = (uuid, name) => {
     fetch("http://localhost:5000/VisitorRegistration/" + uuid, {
-      method: "GET"
+      method: "GET",
     })
-      .then(response => {
-        response.json().then(data => {
+      .then((response) => {
+        response.json().then((data) => {
           if (name === "view") {
             this.setState({ viewVisitor: data, viewModalShow: true });
           } else if (name === "delete") {
@@ -43,23 +42,22 @@ export default class VisitorDetails extends Component {
           }
         });
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
 
-  deleteVisitor = uuid => {
+  deleteVisitor = (uuid) => {
     fetch("http://localhost:5000/VisitorRegistration/" + uuid, {
-      method: "DELETE"
+      method: "DELETE",
     })
-      .then(response => {
-        response.json().then(data => {
-          console.log("deletedata:", data);
+      .then((response) => {
+        response.json().then((data) => {
           window.location.reload(true);
         });
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     var viewVisitor = _.clone(this.state.viewVisitor);
@@ -71,7 +69,7 @@ export default class VisitorDetails extends Component {
     this.setState({ viewVisitor: viewVisitor });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const { viewVisitor } = this.state;
     if (this.validator.allValid()) {
@@ -91,25 +89,24 @@ export default class VisitorDetails extends Component {
         Visit: viewVisitor.Visit,
         Image: viewVisitor.Image,
         Date: viewVisitor.date,
-        UUID: viewVisitor.UUID
+        UUID: viewVisitor.UUID,
       };
 
       fetch("http://localhost:5000/VisitorRegistration/" + viewVisitor.UUID, {
         method: "PUT",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(visitorData)
+        body: JSON.stringify(visitorData),
       })
-        .then(response => {
-          response.json().then(body => {
-            console.log("body:", body);
+        .then((response) => {
+          response.json().then((body) => {
             this.setState({ viewVisitor: body, show: true });
             window.location.reload(true);
           });
         })
-        .catch(error => console.log(error));
+        .catch((error) => console.log(error));
     } else {
       this.validator.showMessages();
       // rerender to show messages for the first time
@@ -117,16 +114,15 @@ export default class VisitorDetails extends Component {
     }
   };
 
-  handlerefresh = e => {
+  handlerefresh = (e) => {
     e.preventDefault();
     this.setState({
-      viewVisitor: {}
+      viewVisitor: {},
     });
   };
 
   render() {
     const { visitor } = this.state;
-    console.log("Visitorcheck:", visitor);
     return (
       <div>
         <ul className="breadcrumb">
@@ -275,7 +271,7 @@ export default class VisitorDetails extends Component {
                       type="button"
                       className="close"
                       data-dismiss="modal"
-                      onClick={e => this.handlerefresh(e)}
+                      onClick={(e) => this.handlerefresh(e)}
                       aria-label="Close"
                     >
                       <span aria-hidden="true">&times;</span>
@@ -294,7 +290,7 @@ export default class VisitorDetails extends Component {
                             name="FirstName"
                             value={this.state.viewVisitor.FirstName || ""}
                             id="firstname"
-                            onChange={e => this.handleInputChange(e)}
+                            onChange={(e) => this.handleInputChange(e)}
                           />
                           <span style={{ color: "red" }}>
                             {this.validator.message(
@@ -314,7 +310,7 @@ export default class VisitorDetails extends Component {
                             className="form-control"
                             name="LastName"
                             value={this.state.viewVisitor.LastName || ""}
-                            onChange={e => this.handleInputChange(e)}
+                            onChange={(e) => this.handleInputChange(e)}
                             id="lastname"
                           />
                           <span style={{ color: "red" }}>
@@ -333,7 +329,7 @@ export default class VisitorDetails extends Component {
                             type="text"
                             className="form-control"
                             value={this.state.viewVisitor.Company || ""}
-                            onChange={e => this.handleInputChange(e)}
+                            onChange={(e) => this.handleInputChange(e)}
                             name="Company"
                             id="Company"
                           />
@@ -346,7 +342,7 @@ export default class VisitorDetails extends Component {
                             type="text"
                             className="form-control"
                             value={this.state.viewVisitor.JobTitle || ""}
-                            onChange={e => this.handleInputChange(e)}
+                            onChange={(e) => this.handleInputChange(e)}
                             name="JobTitle"
                             id="jobtitle"
                           />
@@ -360,7 +356,7 @@ export default class VisitorDetails extends Component {
                             type="email"
                             className="form-control"
                             value={this.state.viewVisitor.Email || ""}
-                            onChange={e => this.handleInputChange(e)}
+                            onChange={(e) => this.handleInputChange(e)}
                             name="Email"
                             id="email"
                           />
@@ -379,7 +375,7 @@ export default class VisitorDetails extends Component {
                           <input
                             type="tel"
                             className="form-control"
-                            onChange={e => this.handleInputChange(e)}
+                            onChange={(e) => this.handleInputChange(e)}
                             value={this.state.viewVisitor.Mobile || ""}
                             name="Mobile"
                             id="mobile"
@@ -401,7 +397,7 @@ export default class VisitorDetails extends Component {
                             type="text"
                             className="form-control"
                             value={this.state.viewVisitor.Person || ""}
-                            onChange={e => this.handleInputChange(e)}
+                            onChange={(e) => this.handleInputChange(e)}
                             name="Person"
                             id="Person"
                           />
@@ -422,7 +418,7 @@ export default class VisitorDetails extends Component {
                             type="text"
                             className="form-control"
                             value={this.state.viewVisitor.Visit || ""}
-                            onChange={e => this.handleInputChange(e)}
+                            onChange={(e) => this.handleInputChange(e)}
                             name="Visit"
                             id="Visit"
                           />
@@ -446,14 +442,14 @@ export default class VisitorDetails extends Component {
                           !this.state.viewVisitor.Visit ||
                           !this.state.viewVisitor.Person
                         }
-                        onClick={e => this.handleSubmit(e)}
+                        onClick={(e) => this.handleSubmit(e)}
                       >
                         Submit
                       </button>
                       <button
                         type="reset"
                         className="btn btn-default"
-                        onClick={e => this.handlerefresh(e)}
+                        onClick={(e) => this.handlerefresh(e)}
                       >
                         Cancel
                       </button>

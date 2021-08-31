@@ -8,21 +8,20 @@ export default class Admin extends Component {
     this.validator = new SimpleReactValidator();
     this.state = {
       username: "",
-      password: ""
+      password: "",
     };
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    console.log("check:", this.state.username, this.state.password);
     if (this.validator.allValid()) {
-      if (this.state.username === "admin" && this.state.password === "12345") {
+      if (this.state.username === "admin" && this.state.password === "@mgaddam123") {
         // Get all visitor information and show them.
         window.location = "/VisitorDetails";
       } else {
@@ -58,7 +57,7 @@ export default class Admin extends Component {
                       value={this.state.username}
                       name="username"
                       placeholder="UserName"
-                      onChange={e => this.handleChange(e)}
+                      onChange={(e) => this.handleChange(e)}
                     />
                   </div>
                   <span style={{ color: "red" }}>
@@ -82,7 +81,7 @@ export default class Admin extends Component {
                       name="password"
                       value={this.state.password}
                       placeholder="Password"
-                      onChange={e => this.handleChange(e)}
+                      onChange={(e) => this.handleChange(e)}
                     />
                   </div>
                   <span style={{ color: "red" }}>
@@ -102,7 +101,7 @@ export default class Admin extends Component {
                   <button
                     className="btn btn-primary"
                     value="Submit"
-                    onClick={e => this.handleSubmit(e)}
+                    onClick={(e) => this.handleSubmit(e)}
                   >
                     Submit
                   </button>
